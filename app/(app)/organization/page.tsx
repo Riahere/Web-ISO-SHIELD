@@ -52,7 +52,7 @@ function InfoRow({ label, value, icon: Icon }: { label: string; value?: string |
       <div className="flex-1 min-w-0">
         <p className="text-xs text-slate-500 mb-0.5">{label}</p>
         <p className="text-sm text-slate-800 font-medium break-words">
-          {value || <span className="text-slate-400 italic font-normal">Belum diisi</span>}
+          {value || <span className="text-slate-400 italic font-normal">Not provided</span>}
         </p>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default function OrganizationPage() {
       setOrg(newOrg)
     }
     setSaving(false); setEditing(false)
-    setFeedback({ type: 'success', msg: 'Profil organisasi berhasil disimpan!' })
+    setFeedback({ type: 'success', msg: 'Organization profile saved successfully!' })
     setTimeout(() => setFeedback(null), 3500)
   }
 
@@ -138,12 +138,12 @@ export default function OrganizationPage() {
     const ext = logoFile.name.split('.').pop()
     const path = `org-logos/${org.id}.${ext}`
     const { error: uploadError } = await supabase.storage.from('avatars').upload(path, logoFile, { upsert: true, contentType: logoFile.type })
-    if (uploadError) { setFeedback({ type: 'error', msg: 'Gagal upload: ' + uploadError.message }); setUploadingLogo(false); return }
+    if (uploadError) { setFeedback({ type: 'error', msg: 'Upload failed: ' + uploadError.message }); setUploadingLogo(false); return }
     const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
     await supabase.from('organizations').update({ logo_url: publicUrl } as any).eq('id', org.id)
     setOrg(prev => prev ? { ...prev, logo_url: publicUrl } as any : prev)
     setForm(prev => ({ ...prev, logo_url: publicUrl }))
-    setFeedback({ type: 'success', msg: 'Logo berhasil diperbarui!' })
+    setFeedback({ type: 'success', msg: 'Logo updated successfully!' })
     setShowLogoModal(false); setLogoFile(null); setLogoPreview(null)
     setUploadingLogo(false)
     setTimeout(() => setFeedback(null), 3500)
@@ -157,7 +157,7 @@ export default function OrganizationPage() {
     setOrg(prev => prev ? { ...prev, logo_url: null } as any : prev)
     setForm(prev => ({ ...prev, logo_url: '' }))
     setLogoPreview(null); setLogoFile(null); setShowLogoModal(false)
-    setFeedback({ type: 'success', msg: 'Logo dihapus.' })
+    setFeedback({ type: 'success', msg: 'Logo removed.' })
     setUploadingLogo(false)
     setTimeout(() => setFeedback(null), 3000)
   }
@@ -165,7 +165,7 @@ export default function OrganizationPage() {
   function handleLogoFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    if (file.size > 2 * 1024 * 1024) { setFeedback({ type: 'error', msg: 'Ukuran file maksimal 2MB.' }); return }
+    if (file.size > 2 * 1024 * 1024) { setFeedback({ type: 'error', msg: 'File size must be under 2MB.' }); return }
     setLogoFile(file)
     setLogoPreview(URL.createObjectURL(file))
   }
@@ -192,7 +192,7 @@ export default function OrganizationPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-800">Organization Profile</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Kelola profil dan lingkup audit ISO 27001 organisasi kamu</p>
+            <p className="text-sm text-slate-500 mt-0.5">Manage your organization's profile and ISO 27001 audit scope</p>
           </div>
           {!editing ? (
             <button onClick={() => setEditing(true)}
@@ -204,13 +204,13 @@ export default function OrganizationPage() {
               {org && (
                 <button onClick={() => { setEditing(false); setForm(org) }}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-sm font-medium transition-all">
-                  <X className="w-4 h-4" /> Batal
+                  <X className="w-4 h-4" /> Cancel
                 </button>
               )}
               <button onClick={handleSave} disabled={saving}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all shadow-md shadow-indigo-200 disabled:opacity-50">
                 {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {saving ? 'Menyimpan...' : org ? 'Simpan Perubahan' : 'Buat Organisasi'}
+                {saving ? 'Saving...' : org ? 'Save Changes' : 'Create Organization'}
               </button>
             </div>
           )}
@@ -231,11 +231,11 @@ export default function OrganizationPage() {
         {!org && !editing && (
           <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center shadow-sm">
             <Building2 className="w-14 h-14 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-700 mb-2">Belum Ada Organisasi</h3>
-            <p className="text-slate-500 text-sm mb-6">Buat profil organisasi untuk memulai proses audit ISO 27001.</p>
+            <h3 className="text-lg font-semibold text-slate-700 mb-2">No Organization Yet</h3>
+            <p className="text-slate-500 text-sm mb-6">Create an organization profile to start your ISO 27001 audit process.</p>
             <button onClick={() => setEditing(true)}
               className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all">
-              Buat Organisasi
+              Create Organization
             </button>
           </div>
         )}
@@ -252,7 +252,7 @@ export default function OrganizationPage() {
                   </button>
                   <img
                     src={logoSrc}
-                    alt="Logo Organisasi"
+                    alt="Organization Logo"
                     className="max-w-[90vw] max-h-[85vh] rounded-2xl object-contain shadow-2xl border border-white/10"
                   />
                   <p className="text-center text-white/50 text-sm mt-3">{org?.name}</p>
@@ -265,7 +265,7 @@ export default function OrganizationPage() {
               <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
                 <div className="bg-white rounded-2xl p-6 w-full max-w-sm border border-slate-200 shadow-2xl space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-slate-800">Edit Logo Organisasi</h3>
+                    <h3 className="font-semibold text-slate-800">Edit Organization Logo</h3>
                     <button onClick={() => { setShowLogoModal(false); setLogoPreview(null); setLogoFile(null) }}
                       className="text-slate-400 hover:text-slate-600 transition-colors">
                       <X className="w-5 h-5" />
@@ -284,15 +284,15 @@ export default function OrganizationPage() {
                   <div onClick={() => fileInputRef.current?.click()}
                     className="border-2 border-dashed border-slate-200 hover:border-indigo-300 rounded-xl p-5 text-center cursor-pointer transition-colors group">
                     <Upload className="w-6 h-6 text-slate-400 group-hover:text-indigo-500 mx-auto mb-2 transition-colors" />
-                    <p className="text-sm text-slate-500">{logoFile ? logoFile.name : 'Klik untuk pilih logo'}</p>
-                    <p className="text-xs text-slate-400 mt-1">PNG, JPG, SVG, WebP — maks 2MB</p>
+                    <p className="text-sm text-slate-500">{logoFile ? logoFile.name : 'Click to select a logo'}</p>
+                    <p className="text-xs text-slate-400 mt-1">PNG, JPG, SVG, WebP — max 2MB</p>
                   </div>
                   <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleLogoFileChange} />
                   <div className="flex gap-2">
                     <button onClick={handleUploadLogo} disabled={!logoFile || uploadingLogo}
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-all disabled:opacity-40">
                       {uploadingLogo ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                      {uploadingLogo ? 'Mengupload...' : 'Simpan Logo'}
+                      {uploadingLogo ? 'Uploading...' : 'Save Logo'}
                     </button>
                     {(org as any)?.logo_url && (
                       <button onClick={handleRemoveLogo} disabled={uploadingLogo}
@@ -308,7 +308,6 @@ export default function OrganizationPage() {
             {/* Hero card */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 flex items-start gap-6 shadow-sm">
               <div className="relative flex-shrink-0 group">
-                {/* Klik logo → lihat besar */}
                 <button
                   onClick={() => logoSrc ? setShowViewLogo(true) : setShowLogoModal(true)}
                   className="relative block"
@@ -327,25 +326,24 @@ export default function OrganizationPage() {
                     </div>
                   )}
                 </button>
-                {/* Tombol kamera kecil di pojok → edit logo */}
                 <button
                   onClick={() => setShowLogoModal(true)}
                   className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-indigo-600 hover:bg-indigo-700 border-2 border-white flex items-center justify-center transition-colors shadow-md"
-                  title="Ganti logo"
+                  title="Change logo"
                 >
                   <Camera className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-2xl font-bold text-slate-800">{org.name}</h2>
-                <p className="text-slate-500 text-sm mt-1">{org.description || 'Tidak ada deskripsi'}</p>
+                <p className="text-slate-500 text-sm mt-1">{org.description || 'No description provided'}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-3">
                   <span className="flex items-center gap-1.5 text-xs bg-indigo-50 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-full font-medium">
                     {currentSector?.label || org.sector}
                   </span>
                   {org.employee_count && (
                     <span className="flex items-center gap-1.5 text-xs bg-slate-50 text-slate-600 border border-slate-200 px-2.5 py-1 rounded-full">
-                      <Users className="w-3 h-3" /> {org.employee_count.toLocaleString()} karyawan
+                      <Users className="w-3 h-3" /> {org.employee_count.toLocaleString()} employees
                     </span>
                   )}
                   {org.country && (
@@ -366,8 +364,8 @@ export default function OrganizationPage() {
               {[
                 { label: 'Exposure Level', value: currentExposure?.label || '—', icon: currentExposure?.icon || Wifi, bg: 'bg-red-50', iconColor: 'text-red-500', textColor: 'text-red-700' },
                 { label: 'Risk Appetite', value: currentRisk?.label || '—', icon: TrendingUp, bg: 'bg-amber-50', iconColor: 'text-amber-500', textColor: 'text-amber-700' },
-                { label: 'Audit Mulai', value: org.audit_period_start ? new Date(org.audit_period_start).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '—', icon: Calendar, bg: 'bg-purple-50', iconColor: 'text-purple-500', textColor: 'text-purple-700' },
-                { label: 'Audit Selesai', value: org.audit_period_end ? new Date(org.audit_period_end).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '—', icon: BadgeCheck, bg: 'bg-cyan-50', iconColor: 'text-cyan-500', textColor: 'text-cyan-700' },
+                { label: 'Audit Start', value: org.audit_period_start ? new Date(org.audit_period_start).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '—', icon: Calendar, bg: 'bg-purple-50', iconColor: 'text-purple-500', textColor: 'text-purple-700' },
+                { label: 'Audit End', value: org.audit_period_end ? new Date(org.audit_period_end).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '—', icon: BadgeCheck, bg: 'bg-cyan-50', iconColor: 'text-cyan-500', textColor: 'text-cyan-700' },
               ].map(({ label, value, icon: Icon, bg, iconColor, textColor }) => (
                 <div key={label} className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-3 ${bg}`}>
@@ -380,16 +378,16 @@ export default function OrganizationPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-5">
-              <SectionCard title="Informasi Kontak" icon={Mail} iconBg="bg-blue-50 text-blue-500">
-                <InfoRow label="Narahubung" value={org.contact_name} icon={Users} />
+              <SectionCard title="Contact Information" icon={Mail} iconBg="bg-blue-50 text-blue-500">
+                <InfoRow label="Contact Person" value={org.contact_name} icon={Users} />
                 <InfoRow label="Email" value={org.contact_email} icon={Mail} />
-                <InfoRow label="Telepon" value={org.contact_phone} icon={Phone} />
+                <InfoRow label="Phone" value={org.contact_phone} icon={Phone} />
                 <InfoRow label="Website" value={org.website} icon={Globe} />
-                <InfoRow label="Alamat" value={org.address} icon={MapPin} />
+                <InfoRow label="Address" value={org.address} icon={MapPin} />
               </SectionCard>
 
               <div className="space-y-5">
-                <SectionCard title="Tipe Sistem dalam Scope" icon={Server} iconBg="bg-purple-50 text-purple-500">
+                <SectionCard title="System Types in Scope" icon={Server} iconBg="bg-purple-50 text-purple-500">
                   {(org.system_types || []).length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {(org.system_types || []).map(t => {
@@ -402,13 +400,13 @@ export default function OrganizationPage() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-sm text-slate-400 italic">Belum ada sistem yang dipilih</p>
+                    <p className="text-sm text-slate-400 italic">No systems selected</p>
                   )}
                 </SectionCard>
 
-                <SectionCard title="Lingkup Audit (Scope)" icon={Shield} iconBg="bg-emerald-50 text-emerald-500">
+                <SectionCard title="Audit Scope" icon={Shield} iconBg="bg-emerald-50 text-emerald-500">
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    {org.scope_description || <span className="italic text-slate-400">Belum ada deskripsi scope</span>}
+                    {org.scope_description || <span className="italic text-slate-400">No scope description provided</span>}
                   </p>
                 </SectionCard>
               </div>
@@ -419,7 +417,7 @@ export default function OrganizationPage() {
         {/* EDIT MODE */}
         {editing && (
           <div className="space-y-5">
-            <SectionCard title="Informasi Dasar" icon={Building2} iconBg="bg-indigo-50 text-indigo-500">
+            <SectionCard title="Basic Information" icon={Building2} iconBg="bg-indigo-50 text-indigo-500">
               <div className="flex items-center gap-4 mb-5 pb-5 border-b border-slate-100">
                 <button onClick={() => setShowLogoModal(true)} className="relative group flex-shrink-0">
                   {(org as any)?.logo_url ? (
@@ -435,31 +433,31 @@ export default function OrganizationPage() {
                   </div>
                 </button>
                 <div>
-                  <p className="text-sm font-medium text-slate-700">Logo Organisasi</p>
-                  <p className="text-xs text-slate-400 mt-0.5">Klik logo untuk upload foto atau ikon organisasi</p>
+                  <p className="text-sm font-medium text-slate-700">Organization Logo</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Click the logo to upload your organization's icon or photo</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
-                  <label className="label-dark">Nama Organisasi *</label>
-                  <input type="text" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} className="input-dark" placeholder="PT. Contoh Indonesia" />
+                  <label className="label-dark">Organization Name *</label>
+                  <input type="text" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} className="input-dark" placeholder="Acme Corporation" />
                 </div>
                 <div className="col-span-2">
-                  <label className="label-dark">Deskripsi</label>
-                  <textarea value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })} className="input-dark h-20 resize-none" placeholder="Deskripsi singkat organisasi..." />
+                  <label className="label-dark">Description</label>
+                  <textarea value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })} className="input-dark h-20 resize-none" placeholder="Brief description of your organization..." />
                 </div>
                 <div>
-                  <label className="label-dark">Sektor Bisnis *</label>
+                  <label className="label-dark">Business Sector *</label>
                   <select value={form.sector || 'technology'} onChange={e => setForm({ ...form, sector: e.target.value as any })} className="input-dark">
                     {sectors.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="label-dark">Jumlah Karyawan</label>
+                  <label className="label-dark">Number of Employees</label>
                   <input type="number" value={form.employee_count || ''} onChange={e => setForm({ ...form, employee_count: parseInt(e.target.value) || null })} className="input-dark" placeholder="e.g., 500" />
                 </div>
                 <div>
-                  <label className="label-dark">Negara</label>
+                  <label className="label-dark">Country</label>
                   <input type="text" value={form.country || ''} onChange={e => setForm({ ...form, country: e.target.value })} className="input-dark" placeholder="Indonesia" />
                 </div>
                 <div>
@@ -470,33 +468,33 @@ export default function OrganizationPage() {
                   </div>
                 </div>
                 <div className="col-span-2">
-                  <label className="label-dark">Alamat</label>
+                  <label className="label-dark">Address</label>
                   <div className="relative">
                     <MapPin className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                    <textarea value={form.address || ''} onChange={e => setForm({ ...form, address: e.target.value })} className="input-dark pl-10 h-16 resize-none" placeholder="Jl. Sudirman No. 1, Jakarta" />
+                    <textarea value={form.address || ''} onChange={e => setForm({ ...form, address: e.target.value })} className="input-dark pl-10 h-16 resize-none" placeholder="123 Main Street, Jakarta" />
                   </div>
                 </div>
               </div>
             </SectionCard>
 
-            <SectionCard title="Informasi Kontak" icon={Mail} iconBg="bg-blue-50 text-blue-500">
+            <SectionCard title="Contact Information" icon={Mail} iconBg="bg-blue-50 text-blue-500">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="label-dark">Narahubung</label>
+                  <label className="label-dark">Contact Person</label>
                   <div className="relative">
                     <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type="text" value={form.contact_name || ''} onChange={e => setForm({ ...form, contact_name: e.target.value })} className="input-dark pl-10" placeholder="John Doe" />
                   </div>
                 </div>
                 <div>
-                  <label className="label-dark">Email Kontak</label>
+                  <label className="label-dark">Contact Email</label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type="email" value={form.contact_email || ''} onChange={e => setForm({ ...form, contact_email: e.target.value })} className="input-dark pl-10" placeholder="security@company.com" />
                   </div>
                 </div>
                 <div>
-                  <label className="label-dark">Telepon</label>
+                  <label className="label-dark">Phone</label>
                   <div className="relative">
                     <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input type="tel" value={form.contact_phone || ''} onChange={e => setForm({ ...form, contact_phone: e.target.value })} className="input-dark pl-10" placeholder="+62 21 1234 5678" />
@@ -505,7 +503,7 @@ export default function OrganizationPage() {
               </div>
             </SectionCard>
 
-            <SectionCard title="Tipe Sistem dalam Scope" icon={Server} iconBg="bg-purple-50 text-purple-500">
+            <SectionCard title="System Types in Scope" icon={Server} iconBg="bg-purple-50 text-purple-500">
               <div className="grid grid-cols-4 gap-2">
                 {systemTypeOptions.map(({ id, label, icon }) => {
                   const selected = (form.system_types || []).includes(id)
@@ -554,36 +552,36 @@ export default function OrganizationPage() {
               </div>
             </SectionCard>
 
-            <SectionCard title="Periode Audit" icon={Calendar} iconBg="bg-cyan-50 text-cyan-500">
+            <SectionCard title="Audit Period" icon={Calendar} iconBg="bg-cyan-50 text-cyan-500">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="label-dark">Tanggal Mulai</label>
+                  <label className="label-dark">Start Date</label>
                   <input type="date" value={form.audit_period_start || ''} onChange={e => setForm({ ...form, audit_period_start: e.target.value })} className="input-dark" />
                 </div>
                 <div>
-                  <label className="label-dark">Tanggal Selesai</label>
+                  <label className="label-dark">End Date</label>
                   <input type="date" value={form.audit_period_end || ''} onChange={e => setForm({ ...form, audit_period_end: e.target.value })} className="input-dark" />
                 </div>
               </div>
             </SectionCard>
 
-            <SectionCard title="Lingkup Audit (Scope Description)" icon={Shield} iconBg="bg-emerald-50 text-emerald-500">
+            <SectionCard title="Audit Scope Description" icon={Shield} iconBg="bg-emerald-50 text-emerald-500">
               <textarea value={form.scope_description || ''} onChange={e => setForm({ ...form, scope_description: e.target.value })}
                 className="input-dark h-32 resize-none"
-                placeholder="Deskripsikan ruang lingkup audit ISO 27001 ini..." />
+                placeholder="Describe the scope of this ISO 27001 audit..." />
             </SectionCard>
 
             <div className="flex justify-end gap-3 pb-4">
               {org && (
                 <button onClick={() => { setEditing(false); setForm(org) }}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-sm font-medium transition-all">
-                  <X className="w-4 h-4" /> Batal
+                  <X className="w-4 h-4" /> Cancel
                 </button>
               )}
               <button onClick={handleSave} disabled={saving}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all shadow-md shadow-indigo-200 disabled:opacity-50">
                 {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                {saving ? 'Menyimpan...' : org ? 'Simpan Perubahan' : 'Buat Organisasi'}
+                {saving ? 'Saving...' : org ? 'Save Changes' : 'Create Organization'}
               </button>
             </div>
           </div>
