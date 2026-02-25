@@ -7,7 +7,6 @@ import { Shield, Lock, Mail, User, Eye, EyeOff, AlertCircle, CheckCircle } from 
 import { createClient } from '@/lib/supabase/client'
 import { Suspense } from 'react'
 
-// ─── CSS (sama seperti sebelumnya, tidak diubah) ──────────────────────────────
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap');
   .rg-root { min-height:100vh; background:#04060f; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; padding:1rem; position:relative; overflow:hidden; }
@@ -126,7 +125,6 @@ const strengthMeta = [
   { label:'Strong', color:'#22c55e' },
 ]
 
-// ─── Tipe untuk data invite ───────────────────────────────────────────────────
 type InviteData = {
   organization_id: string
   role: string
@@ -136,8 +134,6 @@ type InviteData = {
 function RegisterContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  // Ambil token dari URL jika ada: /auth/register?invite=TOKEN
   const inviteToken = searchParams.get('invite')
 
   const [form, setForm] = useState({ full_name:'', email:'', password:'', confirm:'' })
@@ -147,20 +143,18 @@ function RegisterContent() {
   const [success, setSuccess] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // State untuk data invite
   const [inviteData, setInviteData] = useState<InviteData | null>(null)
   const [inviteLoading, setInviteLoading] = useState(false)
   const [inviteError, setInviteError] = useState<string | null>(null)
 
   useEffect(() => { setMounted(true) }, [])
 
-  // Validasi invite token saat halaman dibuka
   useEffect(() => {
     if (!inviteToken) return
     async function validateInvite() {
       setInviteLoading(true)
       const supabase = createClient()
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('organization_invites')
         .select('organization_id, role, organizations(name)')
         .eq('token', inviteToken)
@@ -194,7 +188,6 @@ function RegisterContent() {
     setLoading(true); setError(null)
     const supabase = createClient()
 
-    // 1. Buat akun di Supabase Auth
     const { data, error: signUpError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
@@ -204,10 +197,6 @@ function RegisterContent() {
     if (signUpError) { setError(signUpError.message); setLoading(false); return }
     if (!data.user) { setError('Gagal membuat akun.'); setLoading(false); return }
 
-    // Trigger `handle_new_user` di DB sudah otomatis insert ke `profiles`
-    // Kita hanya perlu update jika ada invite token
-
-    // 2. Jika ada invite token yang valid, langsung assign ke organisasi
     if (inviteToken && inviteData) {
       const { error: profileError } = await supabase
         .from('profiles')
@@ -218,8 +207,7 @@ function RegisterContent() {
         .eq('id', data.user.id)
 
       if (!profileError) {
-        // Update used_count di invite
-        await supabase
+        await (supabase as any)
           .from('organization_invites')
           .update({ used_count: (inviteData as any).used_count + 1 })
           .eq('token', inviteToken)
@@ -261,7 +249,6 @@ function RegisterContent() {
                 : 'Start your ISO 27001 audit journey'}
             </div>
 
-            {/* Banner invite yang valid */}
             {inviteLoading && (
               <div className="rg-invite-banner">
                 <div className="rg-spinner" style={{ borderColor:'rgba(139,92,246,.3)', borderTopColor:'#a78bfa' }} />
