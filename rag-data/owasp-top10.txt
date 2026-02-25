@@ -1,0 +1,42 @@
+OWASP Top 10 Overview
+OWASP Top 10 lists the most critical web application security risks.
+
+A01 Broken Access Control
+Occurs when users can access resources without proper authorization.
+Related ISO Controls: A.9 Access Control, A.9.2.3 Privileged Access.
+
+A02 Cryptographic Failures
+Sensitive data exposed due to weak or missing encryption.
+Related ISO Controls: A.10 Cryptography.
+
+A03 Injection
+SQL, OS, or LDAP injection due to unsanitized inputs.
+Related ISO Controls: A.14 Secure Development, A.12 Operations Security.
+
+A04 Insecure Design
+Lack of threat modeling and secure architecture.
+Related ISO Controls: A.14 System Acquisition and Development.
+
+A05 Security Misconfiguration
+Default passwords, open storage, verbose errors.
+Related ISO Controls: A.12 Operations Security, A.9 Access Control.
+
+A06 Vulnerable Components
+Using outdated libraries with known vulnerabilities.
+Related ISO Controls: A.12.6 Technical Vulnerability Management.
+
+A07 Identification and Authentication Failures
+Weak login, session hijacking.
+Related ISO Controls: A.9 Access Control.
+
+A08 Software and Data Integrity Failures
+Untrusted updates or CI/CD compromises.
+Related ISO Controls: A.14 Development Security.
+
+A09 Security Logging Failures
+No logs or alerts for suspicious activity.
+Related ISO Controls: A.12.4 Logging and Monitoring.
+
+A10 Server-Side Request Forgery (SSRF)
+Server fetching unintended internal resources.
+Related ISO Controls: A.13 Communications Security.

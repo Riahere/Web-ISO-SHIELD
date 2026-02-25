@@ -1,0 +1,26 @@
+ISO 27001:2022 Control Structure
+ISO 27001:2022 reorganized Annex A into 4 domains: Organizational, People, Physical, and Technological controls.
+
+Organizational Controls
+Focus on governance, policies, supplier relationships, and risk ownership. Example: defining roles for risk acceptance and ISMS governance.
+
+People Controls
+Covers awareness training, disciplinary processes, and insider threat mitigation.
+
+Physical Controls
+Includes secure areas, environmental controls, and protection against physical intrusion.
+
+Technological Controls
+Covers logging, monitoring, access control, malware protection, and configuration management.
+
+Control Integration
+ISO 27001 controls should not operate in isolation. For example, access control must integrate with HR onboarding and offboarding processes.
+
+Risk Treatment Planning
+Controls must be selected based on risk assessment outcomes, not implemented blindly.
+
+Statement of Applicability (SoA)
+Organizations must justify which controls are included or excluded and provide rationale aligned with risk treatment.
+
+Continuous Improvement
+ISMS must follow PDCA (Plan-Do-Check-Act) cycle with periodic reviews and internal audits.

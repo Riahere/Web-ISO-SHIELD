@@ -1,0 +1,17 @@
+Privileged Account Abuse
+If administrators share root credentials, accountability is lost and malicious actions may go undetected. Recommended controls: A.9 Access Control, privileged access monitoring, and session recording.
+
+Shadow IT
+Employees using unauthorized SaaS tools can expose sensitive data outside organizational visibility. Controls: asset inventory, cloud access governance, and acceptable use policies.
+
+Unmonitored Logs
+If logs are generated but not reviewed, security incidents may remain undetected. Controls: centralized logging and automated alerting.
+
+Weak Vendor Security
+A third-party vendor with weak security may become an attack entry point. Controls: supplier risk assessments and contractual security requirements.
+
+No Incident Playbooks
+Organizations without defined incident playbooks may respond inconsistently during breaches. Controls: incident response planning and tabletop exercises.
+
+Overprivileged Access
+Users with excessive permissions increase blast radius of compromise. Controls: least privilege enforcement and periodic access reviews.

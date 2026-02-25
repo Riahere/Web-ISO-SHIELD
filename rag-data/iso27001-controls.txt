@@ -1,0 +1,38 @@
+ISO 27001 Annex A Overview
+Annex A contains security controls grouped into domains such as access control, cryptography, operations security, and incident management. These controls help organizations manage risks systematically.
+
+A.5 Information Security Policies
+Organizations must define and maintain information security policies approved by management and communicated internally.
+
+A.6 Organization of Information Security
+Defines roles and responsibilities for information security governance and segregation of duties.
+
+A.7 Human Resource Security
+Ensures employees understand security responsibilities before, during, and after employment.
+
+A.8 Asset Management
+Organizations must identify assets, assign ownership, and define acceptable use policies.
+
+A.9 Access Control
+Access must be restricted based on business needs and least privilege principles.
+
+A.9.2.3 Management of Privileged Access Rights
+Privileged accounts must be tightly controlled, monitored, and reviewed periodically.
+
+A.10 Cryptography
+Use encryption to protect confidentiality and integrity of sensitive data.
+
+A.12 Operations Security
+Logging, monitoring, and change management must be implemented to protect operations.
+
+A.12.4 Logging and Monitoring
+Event logs must be produced, protected, and regularly reviewed.
+
+A.13 Communications Security
+Networks must be secured and data protected during transmission.
+
+A.16 Incident Management
+Organizations must have incident response procedures and reporting mechanisms.
+
+A.18 Compliance
+Ensure adherence to legal, regulatory, and contractual requirements.

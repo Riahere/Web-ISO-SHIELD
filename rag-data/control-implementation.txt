@@ -1,0 +1,20 @@
+Implementing Least Privilege
+Start with role-based access control (RBAC), map permissions to job roles, and conduct quarterly access reviews.
+
+Logging Implementation
+Centralize logs using SIEM tools, define alert thresholds, and retain logs based on compliance requirements.
+
+Privileged Access Management
+Use PAM solutions, enforce MFA for admins, rotate credentials, and monitor privileged sessions.
+
+Security Awareness Programs
+Conduct regular phishing simulations and track employee training completion rates.
+
+Asset Inventory
+Maintain an updated asset register including owners, classification, and lifecycle status.
+
+Vulnerability Management
+Perform regular vulnerability scans, prioritize based on CVSS score, and track remediation SLAs.
+
+Incident Response Setup
+Define detection, containment, eradication, and recovery steps with clear roles and escalation paths.

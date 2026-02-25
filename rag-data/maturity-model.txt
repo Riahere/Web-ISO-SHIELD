@@ -1,0 +1,19 @@
+ISMS Maturity Levels
+
+Level 1 Initial
+Security practices are ad hoc and reactive with minimal documentation.
+
+Level 2 Repeatable
+Basic policies exist but enforcement is inconsistent.
+
+Level 3 Defined
+Formalized ISMS with documented policies and standard procedures.
+
+Level 4 Managed
+Security metrics are tracked and controls are measured for effectiveness.
+
+Level 5 Optimized
+Continuous improvement driven by automation, analytics, and threat intelligence.
+
+Maturity Assessment Tip
+Evaluate not only documentation but real operational evidence such as logs, dashboards, and response times.

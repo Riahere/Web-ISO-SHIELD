@@ -1,0 +1,9 @@
+ignoredBuiltDependencies:
+  - core-js
+  - esbuild
+  - protobufjs
+
+onlyBuiltDependencies:
+  - sharp
+  - supabase
+  - unrs-resolver

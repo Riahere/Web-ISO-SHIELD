@@ -1,0 +1,31 @@
+ISO 27001 Audit Best Practices
+
+Risk-Based Approach
+Audits should prioritize high-risk assets and processes rather than treating all controls equally.
+
+Evidence Collection
+Auditors should gather objective evidence such as logs, policies, and screenshots.
+
+Control Effectiveness
+Not only check if controls exist, but verify if they are effective in practice.
+
+Least Privilege Principle
+Ensure users only have access necessary for their role.
+
+Continuous Monitoring
+Security should be continuously monitored, not only during audits.
+
+Management Support
+Top management commitment is critical for ISMS success.
+
+Documentation Quality
+Policies should be clear, updated, and aligned with actual practices.
+
+Incident Readiness
+Organizations should demonstrate incident detection and response capability.
+
+Third-Party Risk
+Vendors should be assessed for security risks.
+
+Audit Trail
+Maintain clear documentation for audit traceability and accountability.
