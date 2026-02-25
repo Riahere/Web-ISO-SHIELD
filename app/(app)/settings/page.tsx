@@ -62,7 +62,7 @@ export default function UserManagementPage() {
   const [orgId, setOrgId]               = useState<string | null>(null)
   const [search, setSearch]             = useState('')
   const [activeTab, setActiveTab]       = useState<'members' | 'invites'>('members')
-  const [activeFilter, setActiveFilter] = useState<'all' | UserRole>('all')  // ← NEW
+  const [activeFilter, setActiveFilter] = useState<'all' | UserRole>('all')
 
   // Edit role inline
   const [editingId, setEditingId]       = useState<string | null>(null)
@@ -111,7 +111,7 @@ export default function UserManagementPage() {
           .order('created_at', { ascending: false })
         setUnassigned((unassignedList || []) as Profile[])
 
-        const { data: inviteList } = await supabase
+        const { data: inviteList } = await (supabase as any)
           .from('organization_invites').select('*')
           .eq('organization_id', profile.organization_id)
           .order('created_at', { ascending: false })
@@ -146,7 +146,7 @@ export default function UserManagementPage() {
   async function handleCreateInvite() {
     if (!orgId) return
     setCreatingInvite(true)
-    const { error } = await supabase.from('organization_invites').insert({
+    const { error } = await (supabase as any).from('organization_invites').insert({
       organization_id: orgId,
       role: newInviteRole,
       created_by: currentUser?.id,
@@ -168,13 +168,13 @@ export default function UserManagementPage() {
   }
 
   async function toggleInvite(invite: Invite) {
-    await supabase.from('organization_invites')
+    await (supabase as any).from('organization_invites')
       .update({ is_active: !invite.is_active }).eq('id', invite.id)
     setInvites(prev => prev.map(i => i.id === invite.id ? { ...i, is_active: !i.is_active } : i))
   }
 
   async function deleteInvite(id: string) {
-    await supabase.from('organization_invites').delete().eq('id', id)
+    await (supabase as any).from('organization_invites').delete().eq('id', id)
     setInvites(prev => prev.filter(i => i.id !== id))
     showFeedback('success', 'Invite link dihapus.')
   }
@@ -207,7 +207,6 @@ export default function UserManagementPage() {
     auditee: members.filter(m => m.role === 'auditee').length,
   }
 
-  // Filter by role card first, then by search text
   const filteredMembers = members
     .filter(m => activeFilter === 'all' || m.role === activeFilter)
     .filter(m =>
@@ -259,7 +258,7 @@ export default function UserManagementPage() {
         </div>
       )}
 
-      {/* Stats — clickable to filter members */}
+      {/* Stats */}
       <div className="grid grid-cols-4 gap-3 mb-6">
         {([
           { label: 'Total',   value: stats.total,   icon: Users,     color: 'text-slate-700',  filter: 'all'     as const, ring: 'ring-slate-400'  },
@@ -273,7 +272,7 @@ export default function UserManagementPage() {
               key={label}
               onClick={() => {
                 setActiveFilter(isActive && filter !== 'all' ? 'all' : filter)
-                setActiveTab('members') // auto-switch ke tab Members saat klik stat
+                setActiveTab('members')
               }}
               className={[
                 'glass rounded-xl p-4 text-center w-full transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer',
@@ -291,7 +290,7 @@ export default function UserManagementPage() {
         })}
       </div>
 
-      {/* Tabs — hanya untuk admin */}
+      {/* Tabs */}
       {isAdmin && (
         <div className="flex items-center gap-1 mb-4 bg-slate-100 rounded-lg p-1 w-fit">
           <button
@@ -318,10 +317,9 @@ export default function UserManagementPage() {
         </div>
       )}
 
-      {/* ── Tab: Members ──────────────────────────────────────────────────────── */}
+      {/* Tab: Members */}
       {activeTab === 'members' && (
         <>
-          {/* Search + active filter label */}
           <div className="flex items-center gap-3 mb-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -463,7 +461,7 @@ export default function UserManagementPage() {
         </>
       )}
 
-      {/* ── Tab: Invite Links ─────────────────────────────────────────────────── */}
+      {/* Tab: Invite Links */}
       {activeTab === 'invites' && isAdmin && (
         <div className="glass rounded-xl overflow-hidden">
           {invites.length === 0 ? (
@@ -539,7 +537,7 @@ export default function UserManagementPage() {
         </div>
       </div>
 
-      {/* ── Modal: Buat Invite Link ────────────────────────────────────────────── */}
+      {/* Modal: Buat Invite Link */}
       {showInviteModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="glass rounded-2xl p-6 w-full max-w-md border border-slate-200">
@@ -584,7 +582,7 @@ export default function UserManagementPage() {
         </div>
       )}
 
-      {/* ── Modal: Assign User Manual ──────────────────────────────────────────── */}
+      {/* Modal: Assign User Manual */}
       {showAssignModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="glass rounded-2xl p-6 w-full max-w-md border border-slate-200">
